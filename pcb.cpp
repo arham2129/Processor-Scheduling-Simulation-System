@@ -1,21 +1,30 @@
 #include "pcb.h"
 #include <iostream>
 
-using namespace std;
+PCB::PCB(ProcessState state, int pc,
+         const std::string& schedInfo,
+         const std::string& memInfo,
+         const std::string& accInfo)
+    : processState(state),
+      programCounter(pc),
+      schedulingInfo(schedInfo),
+      memoryInfo(memInfo),
+      accountingInfo(accInfo)
+{}
 
-PCB::PCB(ProcessState state, int pc, string schedInfo, string memInfo, string accInfo)
-    : processState(state), programCounter(pc), schedulingInfo(schedInfo), 
-      memoryInfo(memInfo), accountingInfo(accInfo) {}
+void PCB::displayPCB() const {
+    displayPCB(std::cout);
+}
 
-void PCB::displayPCB() {
-    cout << "Process State: " << processState << endl;
-    cout << "Program Counter: " << programCounter << endl;
-    cout << "CPU Registers: ";
+void PCB::displayPCB(std::ostream& out) const {
+    out << "Process State    : " << static_cast<int>(processState) << "\n"
+        << "Program Counter  : " << programCounter << "\n"
+        << "CPU Registers    : ";
     for (int reg : cpuRegisters) {
-        cout << reg << " ";
+        out << reg << " ";
     }
-    cout << endl;
-    cout << "Scheduling Info: " << schedulingInfo << endl;
-    cout << "Memory Info: " << memoryInfo << endl;
-    cout << "Accounting Info: " << accountingInfo << endl;
+    out << "\n"
+        << "Scheduling Info  : " << schedulingInfo << "\n"
+        << "Memory Info      : " << memoryInfo     << "\n"
+        << "Accounting Info  : " << accountingInfo << "\n";
 }

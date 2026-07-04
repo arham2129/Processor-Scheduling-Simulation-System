@@ -1,0 +1,29 @@
+# Build artifacts and object files
+*.o
+*.obj
+*.d
+*.pdb
+*.idb
+*.ilk
+*.exp
+*.lib
+*.a
+
+# Executables
+*.exe
+*.out
+scheduler
+
+# Logs and runtime generated files
+*.log
+simulation_log.txt
+test_save.txt
+test_results.txt
+
+# IDE and build directories
+.vs/
+build/
+out/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake

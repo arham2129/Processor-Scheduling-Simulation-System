@@ -1,194 +1,240 @@
 # Processor Scheduling Simulation System
 
-This project implements a processor scheduling simulation system that models the behavior of different scheduling algorithms in an operating system environment. The system manages processes, CPU scheduling, memory, and I/O operations while collecting performance metrics such as waiting time, turnaround time, CPU utilization, and more.
+A comprehensive C++17 command-line simulation of classic CPU scheduling algorithms.
+The system models process scheduling, memory allocation, I/O queuing, context switching,
+and performance metric collection — suitable for OS education and algorithm comparison.
+
+---
 
 ## Features
 
-### Scheduling Algorithms:
+### Scheduling Algorithms
 
-- First-Come, First-Served (FCFS)
-- Round Robin (RR) (with configurable time quantum)
-- Shortest Job First (SJF) (Preemptive)
-- Priority Scheduling (Preemptive)
-- Multilevel Feedback Queue (MLFQ) (configurable time quantum and levels)
-- Lottery Scheduling (optional extension)
+| # | Algorithm | Type | Quantum |
+|---|-----------|------|---------|
+| 1 | First-Come, First-Served (FCFS) | Non-preemptive | No |
+| 2 | Round Robin (RR) | Preemptive (quantum) | Yes |
+| 3 | Multilevel Feedback Queue (MLFQ) | Preemptive (quantum + demotion) | Yes |
+| 4 | Shortest Remaining Time First (SRTF) | Preemptive (arrival-triggered) | No |
+| 5 | Preemptive Priority Scheduling | Preemptive (arrival-triggered) | No |
+| 6 | Shortest Job First (SJF) | Non-preemptive | No |
+| 7 | Multilevel Queue (System / User) | Hybrid | User queue |
 
-### System Components:
+### System Components
 
-- CPU Simulation: Handles process execution and context switching.
-- Memory Manager: Simulates memory allocation and deallocation.
-- I/O Subsystem: Simulates I/O requests and blocking/unblocking of processes.
+- **CPU Simulation** — tracks current process, simulates burst execution, handles context switching
+- **Memory Manager** — allocates and deallocates fixed memory blocks per process
+- **I/O Subsystem** — models I/O request queuing and BLOCKED → READY transitions
+- **Simulation Log** — writes a timestamped event log to `simulation_log.txt`
 
-### Command-Line Interface (CLI):
+### Performance Metrics (computed after each run)
 
-- Add processes with custom attributes (ID, Arrival Time, Burst Time, Priority).
-- Select scheduling algorithms.
-- Configure parameters like time quantum.
-- View detailed performance metrics after simulation.
-- Save/load process configurations and simulation results.
+| Metric | Description |
+|--------|-------------|
+| Avg Waiting Time | Mean time processes wait in the ready queue |
+| Avg Turnaround Time | Mean time from arrival to completion |
+| Avg Response Time | Mean time from arrival to first CPU access |
+| CPU Utilization | Percentage of simulation time CPU was busy |
+| Throughput | Completed processes per time unit |
+| Fairness (Std Dev) | Standard deviation of waiting times |
+| Context Switches | Total scheduling preemptions / completions |
 
-### Performance Metrics:
+### Gantt Chart
 
-- Average Waiting Time
-- Average Turnaround Time
-- Average Response Time
-- CPU Utilization
-- Throughput
-- Fairness Metrics (variance in waiting times)
-- Context Switch Count
+After each simulation a formatted Gantt chart is printed showing process execution order
+with precise time boundaries.
 
-### Visualization:
+### File I/O
 
-- Text-based Gantt Chart: Shows the order of process execution over time.
-- Event Logging: Logs simulation events (process arrivals, executions, terminations) into a file.
+- **Save configuration**: persist process list and scheduler settings to a file
+- **Load configuration**: restore a saved configuration (scheduler is automatically reconstructed)
+- **Save results**: save the Gantt chart and all metrics to a text file
 
-### File I/O:
+---
 
-- Save and load process configurations.
-- Save simulation results including Gantt chart and performance metrics.
+## Requirements
 
-## Table of Contents
+- C++17 compatible compiler: **GCC 7+**, **Clang 5+**, or **MSVC 2017+**
+- (For Makefile) **GNU Make 3.81+**
+- (For CMake) **CMake 3.14+**
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [Command-Line Interface (CLI)](#command-line-interface-cli)
-- [Supported Scheduling Algorithms](#supported-scheduling-algorithms)
-- [Performance Metrics](#performance-metrics)
-- [File I/O](#file-io)
-- [Simulation Engine](#simulation-engine)
-- [Future Enhancements](#future-enhancements)
-- [Contributing](#contributing)
+---
 
-## Installation
+## Building
 
-1. Clone the Repository:
+### Option A — GNU Make (recommended)
 
-   ```bash
-   git clone https://github.com/yourusername/scheduling-simulation-system.git
-   cd scheduling-simulation-system
-   ```
+```bash
+# Build
+make
 
-2. Compile the Project:
+# Build and run immediately
+make run
 
-   ```bash
-   g++ -std=c++11 -o scheduler main.cpp cpu.cpp memory_manager.cpp io_subsystem.cpp process.cpp pcb.cpp fcfs_scheduler.cpp round_robin_scheduler.cpp mlfq_scheduler.cpp preemptive_sjf_scheduler.cpp priority_scheduler.cpp simulation_engine.cpp file_io.cpp
-   ```
+# Clean build artefacts
+make clean
+```
 
-3. Run the Simulation:
+### Option B — CMake
 
-   ```bash
-   ./scheduler
-   ```
+```bash
+# Create a build directory
+mkdir build && cd build
+
+# Configure
+cmake ..
+
+# Build
+cmake --build .
+
+# Run
+./scheduler        # Linux / macOS
+scheduler.exe      # Windows
+```
+
+### Option C — Single g++ command
+
+```bash
+g++ -std=c++17 -Wall -Wextra -O2 -o scheduler \
+    cpu.cpp fcfs_scheduler.cpp file_io.cpp io_subsystem.cpp \
+    main.cpp memory_manager.cpp mlfq_scheduler.cpp \
+    multilevel_queue_scheduler.cpp pcb.cpp \
+    preemptive_sjf_scheduler.cpp priority_scheduler.cpp \
+    process.cpp readyqueue.cpp round_robin_scheduler.cpp \
+    simulation_engine.cpp sjf_scheduler.cpp
+```
+
+> **Note:** `-std=c++17` is required (not c++11). The code uses C++17 features including
+> `if`-statement initialisers.
+
+---
 
 ## Usage
 
-After running the program, the Command-Line Interface (CLI) will guide you through configuring and running the simulation. The main options are:
+Launch the executable to enter the interactive CLI:
 
-1. Add a Process: Input process details like Process ID, Arrival Time, Burst Time, and Priority.
-2. Choose Scheduling Algorithm: Select one of the supported scheduling algorithms.
-3. Set Time Quantum: If using Round Robin or MLFQ, configure the time quantum.
-4. Run Simulation: Execute the simulation, view performance metrics, and see the Gantt chart visualization.
-5. Save/Load Configurations: Save and load configurations to and from files.
-6. Save Simulation Results: Save performance metrics and Gantt chart results to a file.
-7. Exit: Exit the program.
-
-## Command-Line Interface (CLI)
-
-The system offers a simple and interactive CLI for users:
-
-1. Add Process: Enter Process ID, Arrival Time, Burst Time, and Priority.
-2. Choose Algorithm: Select one of the following:
-   - First-Come, First-Served (FCFS)
-   - Round Robin (RR) (requires setting time quantum)
-   - Multilevel Feedback Queue (MLFQ) (requires time quantum for different levels)
-   - Preemptive Shortest Job First (SJF)
-   - Preemptive Priority Scheduling
-3. Set Time Quantum: Set the time quantum for Round Robin or MLFQ.
-4. Run Simulation: Runs the scheduling simulation, displaying performance metrics and the Gantt chart.
-5. Save/Load Configurations: Save process configurations and settings to a file or load previously saved configurations.
-6. Save Results: Save simulation results (metrics, Gantt chart) to a file.
-
-## Supported Scheduling Algorithms
-
-- **First-Come, First-Served (FCFS):**
-  - Processes are executed in the order they arrive.
-
-- **Round Robin (RR):**
-  - Each process is given a fixed time quantum. If the process doesn't complete within this time, it's preempted and returned to the queue.
-
-- **Shortest Job First (SJF) (Preemptive):**
-  - Process with the shortest remaining time is selected. This algorithm is also known as Shortest Remaining Time First (SRTF).
-
-- **Priority Scheduling (Preemptive):**
-  - Process with the highest priority (lowest priority number) is selected for execution. Preemption occurs if a higher-priority process arrives.
-
-- **Multilevel Feedback Queue (MLFQ):**
-  - Processes move between queues based on their execution behavior and time quantum. Supports multiple time quantum levels for varying priorities.
-
-## Performance Metrics
-
-After running the simulation, the following metrics will be displayed:
-
-- Average Waiting Time: Average time a process spends in the ready queue.
-- Average Turnaround Time: Time between process arrival and completion.
-- Average Response Time: Time from process arrival to the first CPU execution.
-- CPU Utilization: Percentage of time the CPU is executing processes.
-- Throughput: Number of processes completed per unit of time.
-- Fairness Metrics: Variance in waiting times to measure fairness.
-- Context Switch Count: Number of context switches that occurred.
-
-## File I/O
-
-The system supports saving and loading simulation configurations and results using file I/O operations.
-
-Save Configuration:
-
-```cpp
-FileIO::save_configuration(processes, "Round Robin", timeQuantum, "config.txt");
+```
+  ╔═════════════════════════════════════════════════════╗
+  ║       PROCESSOR SCHEDULING SIMULATION SYSTEM       ║
+  ╠═════════════════════════════════════════════════════╣
+  ║  Algorithm : None                                  ║
+  ║  Processes : 0                                     ║
+  ║  Last run  : No                                    ║
+  ╠═════════════════════════════════════════════════════╣
+  ║  1. Add a process                                  ║
+  ║  2. Choose scheduling algorithm                    ║
+  ║  3. Update time quantum (RR / MLFQ only)           ║
+  ║  4. Run simulation                                 ║
+  ║  5. Save configuration to file                     ║
+  ║  6. Load configuration from file                   ║
+  ║  7. Save last simulation results to file           ║
+  ║  8. Display current process list                   ║
+  ║  9. Clear all processes                            ║
+  ║  0. Exit                                           ║
+  ╚═════════════════════════════════════════════════════╝
 ```
 
-Load Configuration:
+### Typical workflow
 
-```cpp
-FileIO::load_configuration(processes, schedulerAlgorithm, timeQuantum, "config.txt");
+1. **Add processes** (option 1) — enter Process ID, Arrival Time, Burst Time, Priority
+2. **Choose algorithm** (option 2)
+3. **Run simulation** (option 4)
+4. Review Gantt chart and metrics printed to the terminal
+5. **Save results** (option 7) if desired
+
+### Input validation
+
+- Process IDs must be unique and > 0
+- Burst time must be ≥ 1
+- Arrival time must be ≥ 0
+- Time quantum must be ≥ 1
+- All non-integer inputs are rejected gracefully (no crash / infinite loop)
+
+---
+
+## Configuration File Format
+
+Saved by option 5, loaded by option 6:
+
+```
+Scheduling Algorithm: Round Robin
+Time Quantum: 4
+ProcessID,ArrivalTime,BurstTime,Priority
+1,0,8,2
+2,1,4,1
+3,2,6,3
 ```
 
-Save Simulation Results:
+---
 
-```cpp
-FileIO::save_results(ganttChart, "results.txt");
+## Architecture
+
+```
+main.cpp                 — CLI menu, user interaction, application state
+├── SimulationEngine     — drives the scheduling loop, accumulates metrics
+│   ├── Scheduler*       — polymorphic scheduling interface
+│   │   ├── FCFSScheduler
+│   │   ├── SJFScheduler
+│   │   ├── RoundRobinScheduler
+│   │   ├── MLFQScheduler
+│   │   ├── PreemptiveSJFScheduler
+│   │   ├── PriorityScheduler
+│   │   └── MultilevelQueueScheduler
+│   ├── CPU              — execute CPU burst, track clock
+│   ├── MemoryManager    — allocate / deallocate per-process memory
+│   └── IOSubsystem      — manage blocked processes awaiting I/O
+├── Process              — per-process state, timing attributes
+├── ReadyQueue           — FIFO queue (used by FCFS)
+├── PCB                  — Process Control Block (context save / restore)
+└── FileIO               — configuration and results persistence
 ```
 
-Users can save process configurations and simulation settings to a file and reload them later for further analysis or re-simulation.
+### Scheduler polymorphism
 
-## Simulation Engine
+The `Scheduler` base class interface:
 
-The Simulation Engine manages the entire process scheduling simulation, handling process arrivals, CPU scheduling, and I/O operations. It supports multiple scheduling algorithms and collects performance metrics for evaluation. The engine processes time-based events, executes CPU bursts, handles context switches, and logs events to a file.
+```cpp
+class Scheduler {
+    virtual void     add_process_to_queue(Process& process) = 0;
+    virtual Process* get_next_process()                     = 0;
+    virtual bool     is_empty()                       const = 0;
+    virtual void     on_quantum_expiry(Process& process);   // default: re-add
+    virtual bool     is_preemptive()                  const;// default: false
+    virtual bool     should_preempt(const Process&)   const;// default: false
+    virtual int      get_time_quantum()               const;// default: 0 (run to completion)
+};
+```
 
-Key Components:
+---
 
-- Event-Driven Simulation: Events like process arrival, CPU execution, and I/O completions are processed in chronological order.
-- Gantt Chart: A text-based Gantt chart showing the order of process execution over time.
-- Performance Metrics: After simulation, the engine calculates and prints metrics like waiting time, turnaround time, and CPU utilization.
+## Known Limitations
+
+- Single-core CPU only (multi-core scheduling not modelled)
+- No real-time scheduling algorithms (EDF, Rate Monotonic)
+- I/O simulation is structural only (no random I/O interrupt generation)
+- Starvation prevention (aging) not implemented for Priority Scheduling
+
+---
 
 ## Future Enhancements
 
-Some potential future improvements include:
+- Multi-core CPU simulation with load balancing
+- Real-time scheduling: EDF, Rate Monotonic Scheduling
+- Starvation prevention via priority aging
+- Graphical visualisation of the Gantt chart
 
-- Graphical User Interface (GUI): Develop a GUI to improve user interaction and visualization.
-- Real-Time Scheduling: Add real-time scheduling algorithms such as Rate Monotonic or Earliest Deadline First (EDF).
-- Multi-Core CPU Simulation: Support multi-core environments to simulate parallel execution of processes.
+---
 
 ## Contributing
 
-I welcome contributions from the community. To contribute:
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Commit your changes: `git commit -m 'Add your feature'`
+4. Push: `git push origin feature/your-feature`
+5. Open a Pull Request
 
-1. Fork the repository.
-2. Create a feature branch (`git checkout -b feature-branch`).
-3. Commit your changes (`git commit -m 'Add new feature'`).
-4. Push to the branch (`git push origin feature-branch`).
-5. Open a Pull Request.
+---
 
-## Contact
+## License
 
-For any issues or questions, feel free to open a GitHub issue or contact me directly via the repository.
+This project is provided for educational purposes.

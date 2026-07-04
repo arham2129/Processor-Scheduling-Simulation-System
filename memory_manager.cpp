@@ -1,18 +1,30 @@
 #include "memory_manager.h"
+#include <iostream>
 
 void MemoryManager::allocate_memory(int processID, int size) {
     memoryMap[processID] = size;
-    std::cout << "Allocated " << size << " units of memory to Process ID: " << processID << std::endl;
+    std::cout << "  [MEM] Allocated " << size
+              << " units to Process " << processID << ".\n";
 }
 
 void MemoryManager::deallocate_memory(int processID) {
-    memoryMap.erase(processID);
-    std::cout << "Deallocated memory for Process ID: " << processID << std::endl;
+    if (memoryMap.erase(processID) > 0) {
+        std::cout << "  [MEM] Released memory for Process " << processID << ".\n";
+    }
 }
 
-void MemoryManager::print_memory_status() {
-    std::cout << "Current Memory Allocation:" << std::endl;
-    for (const auto& entry : memoryMap) {
-        std::cout << "Process ID: " << entry.first << " - Memory Size: " << entry.second << " units" << std::endl;
+void MemoryManager::print_memory_status() const {
+    if (memoryMap.empty()) {
+        std::cout << "[Memory] No active allocations.\n";
+        return;
     }
+    std::cout << "[Memory] Current allocations:\n";
+    for (const auto& entry : memoryMap) {
+        std::cout << "  Process " << entry.first
+                  << " => " << entry.second << " units\n";
+    }
+}
+
+std::size_t MemoryManager::allocation_count() const {
+    return memoryMap.size();
 }

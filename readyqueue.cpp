@@ -6,13 +6,17 @@ void ReadyQueue::add_process(Process* process) {
 
 Process* ReadyQueue::get_next_process() {
     if (!queue.empty()) {
-        Process* next_process = queue.front();
+        Process* next = queue.front();
         queue.pop();
-        return next_process;
+        return next;
     }
-    return nullptr;  
+    return nullptr;
 }
 
-bool ReadyQueue::is_empty() {
+bool ReadyQueue::is_empty() const {
     return queue.empty();
+}
+
+std::size_t ReadyQueue::size() const {
+    return queue.size();
 }

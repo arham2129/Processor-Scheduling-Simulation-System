@@ -114,24 +114,24 @@ g++ -std=c++17 -Wall -Wextra -O2 -o scheduler \
 Launch the executable to enter the interactive CLI:
 
 ```
-  ╔═════════════════════════════════════════════════════╗
-  ║       PROCESSOR SCHEDULING SIMULATION SYSTEM       ║
-  ╠═════════════════════════════════════════════════════╣
-  ║  Algorithm : None                                  ║
-  ║  Processes : 0                                     ║
-  ║  Last run  : No                                    ║
-  ╠═════════════════════════════════════════════════════╣
-  ║  1. Add a process                                  ║
-  ║  2. Choose scheduling algorithm                    ║
-  ║  3. Update time quantum (RR / MLFQ only)           ║
-  ║  4. Run simulation                                 ║
-  ║  5. Save configuration to file                     ║
-  ║  6. Load configuration from file                   ║
-  ║  7. Save last simulation results to file           ║
-  ║  8. Display current process list                   ║
-  ║  9. Clear all processes                            ║
-  ║  0. Exit                                           ║
-  ╚═════════════════════════════════════════════════════╝
+  +=====================================================+
+  |       PROCESSOR SCHEDULING SIMULATION SYSTEM        |
+  +=====================================================+
+  |  Algorithm : None                                   |
+  |  Processes : 0                                      |
+  |  Last run  : No                                     |
+  +-----------------------------------------------------+
+  |  1. Add a process                                   |
+  |  2. Choose scheduling algorithm                     |
+  |  3. Update time quantum (RR / MLFQ only)            |
+  |  4. Run simulation                                  |
+  |  5. Save configuration to file                      |
+  |  6. Load configuration from file                    |
+  |  7. Save last simulation results to file            |
+  |  8. Display current process list                    |
+  |  9. Clear all processes                             |
+  |  0. Exit                                            |
+  +=====================================================+
 ```
 
 ### Typical workflow

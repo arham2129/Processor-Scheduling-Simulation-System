@@ -127,17 +127,17 @@ static Process create_process(const std::vector<Process>& existing) {
  * @return               Heap-allocated Scheduler*.  Caller owns it.
  */
 static Scheduler* choose_scheduler(std::string& algorithmName, int& timeQuantum) {
-    std::cout << "\n  ┌─────────────────────────────────────────────────┐\n";
-    std::cout << "  │           Choose Scheduling Algorithm            │\n";
-    std::cout << "  ├─────────────────────────────────────────────────┤\n";
-    std::cout << "  │  1. First-Come, First-Served (FCFS)             │\n";
-    std::cout << "  │  2. Round Robin (RR)                            │\n";
-    std::cout << "  │  3. Multilevel Feedback Queue (MLFQ)            │\n";
-    std::cout << "  │  4. Preemptive Shortest Job First (SRTF)        │\n";
-    std::cout << "  │  5. Preemptive Priority Scheduling              │\n";
-    std::cout << "  │  6. Non-Preemptive SJF                          │\n";
-    std::cout << "  │  7. Multilevel Queue (System / User)            │\n";
-    std::cout << "  └─────────────────────────────────────────────────┘\n";
+    std::cout << "\n  +-------------------------------------------------+\n";
+    std::cout << "  |           Choose Scheduling Algorithm           |\n";
+    std::cout << "  +-------------------------------------------------+\n";
+    std::cout << "  |  1. First-Come, First-Served (FCFS)             |\n";
+    std::cout << "  |  2. Round Robin (RR)                            |\n";
+    std::cout << "  |  3. Multilevel Feedback Queue (MLFQ)            |\n";
+    std::cout << "  |  4. Preemptive Shortest Job First (SRTF)        |\n";
+    std::cout << "  |  5. Preemptive Priority Scheduling              |\n";
+    std::cout << "  |  6. Non-Preemptive SJF                          |\n";
+    std::cout << "  |  7. Multilevel Queue (System / User)            |\n";
+    std::cout << "  +-------------------------------------------------+\n";
 
     const int choice = read_int("  Enter choice (1-7): ", 1, 7);
 
@@ -196,7 +196,7 @@ static Scheduler* choose_scheduler(std::string& algorithmName, int& timeQuantum)
 // ===========================================================================
 
 static void print_separator() {
-    std::cout << "  ─────────────────────────────────────────────────────\n";
+    std::cout << "  -----------------------------------------------------\n";
 }
 
 static int display_menu(const std::string& algorithm,
@@ -204,27 +204,27 @@ static int display_menu(const std::string& algorithm,
                         bool               simulationRun)
 {
     std::cout << "\n";
-    std::cout << "  ╔═════════════════════════════════════════════════════╗\n";
-    std::cout << "  ║       PROCESSOR SCHEDULING SIMULATION SYSTEM       ║\n";
-    std::cout << "  ╠═════════════════════════════════════════════════════╣\n";
-    std::cout << "  ║  Algorithm : "
-              << std::left << std::setw(38) << algorithm << " ║\n";
-    std::cout << "  ║  Processes : "
-              << std::left << std::setw(38) << processCount << " ║\n";
-    std::cout << "  ║  Last run  : "
-              << std::left << std::setw(38) << (simulationRun ? "Yes" : "No") << " ║\n";
-    std::cout << "  ╠═════════════════════════════════════════════════════╣\n";
-    std::cout << "  ║  1. Add a process                                  ║\n";
-    std::cout << "  ║  2. Choose scheduling algorithm                    ║\n";
-    std::cout << "  ║  3. Update time quantum (RR / MLFQ only)           ║\n";
-    std::cout << "  ║  4. Run simulation                                 ║\n";
-    std::cout << "  ║  5. Save configuration to file                     ║\n";
-    std::cout << "  ║  6. Load configuration from file                   ║\n";
-    std::cout << "  ║  7. Save last simulation results to file           ║\n";
-    std::cout << "  ║  8. Display current process list                   ║\n";
-    std::cout << "  ║  9. Clear all processes                            ║\n";
-    std::cout << "  ║  0. Exit                                           ║\n";
-    std::cout << "  ╚═════════════════════════════════════════════════════╝\n";
+    std::cout << "  +=====================================================+\n";
+    std::cout << "  |       PROCESSOR SCHEDULING SIMULATION SYSTEM        |\n";
+    std::cout << "  +=====================================================+\n";
+    std::cout << "  |  Algorithm : "
+              << std::left << std::setw(38) << algorithm << " |\n";
+    std::cout << "  |  Processes : "
+              << std::left << std::setw(38) << processCount << " |\n";
+    std::cout << "  |  Last run  : "
+              << std::left << std::setw(38) << (simulationRun ? "Yes" : "No") << " |\n";
+    std::cout << "  +-----------------------------------------------------+\n";
+    std::cout << "  |  1. Add a process                                   |\n";
+    std::cout << "  |  2. Choose scheduling algorithm                     |\n";
+    std::cout << "  |  3. Update time quantum (RR / MLFQ only)            |\n";
+    std::cout << "  |  4. Run simulation                                  |\n";
+    std::cout << "  |  5. Save configuration to file                      |\n";
+    std::cout << "  |  6. Load configuration from file                    |\n";
+    std::cout << "  |  7. Save last simulation results to file            |\n";
+    std::cout << "  |  8. Display current process list                    |\n";
+    std::cout << "  |  9. Clear all processes                             |\n";
+    std::cout << "  |  0. Exit                                            |\n";
+    std::cout << "  +=====================================================+\n";
 
     return read_int("  Enter choice (0-9): ", 0, 9);
 }

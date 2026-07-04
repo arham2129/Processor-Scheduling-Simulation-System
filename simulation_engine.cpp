@@ -317,9 +317,9 @@ std::string SimulationEngine::format_gantt_chart() const {
 
     std::ostringstream oss;
     oss << "\n";
-    oss << "╔══════════════════════════════════════════════════════╗\n";
-    oss << "║                     GANTT CHART                     ║\n";
-    oss << "╚══════════════════════════════════════════════════════╝\n";
+    oss << "  +======================================================+\n";
+    oss << "  |                     GANTT CHART                      |\n";
+    oss << "  +======================================================+\n";
 
     // Calculate column widths (at least 5 chars wide)
     std::vector<int> widths;
@@ -330,14 +330,14 @@ std::string SimulationEngine::format_gantt_chart() const {
     }
 
     // ---- Top border ----
-    oss << "+";
+    oss << "  +";
     for (int w : widths) {
         oss << std::string(static_cast<std::size_t>(w), '-') << "+";
     }
     oss << "\n";
 
     // ---- Process labels row ----
-    oss << "|";
+    oss << "  |";
     for (std::size_t i = 0; i < merged.size(); ++i) {
         std::string label = "P" + std::to_string(merged[i].processID);
         int w = widths[i];
@@ -352,7 +352,7 @@ std::string SimulationEngine::format_gantt_chart() const {
     oss << "\n";
 
     // ---- Bottom border ----
-    oss << "+";
+    oss << "  +";
     for (int w : widths) {
         oss << std::string(static_cast<std::size_t>(w), '-') << "+";
     }
@@ -360,7 +360,7 @@ std::string SimulationEngine::format_gantt_chart() const {
 
     // ---- Timeline row ----
     // Print start time of first segment
-    oss << std::setw(1) << merged.front().startTime;
+    oss << "  " << std::setw(1) << merged.front().startTime;
     for (std::size_t i = 0; i < merged.size(); ++i) {
         std::string endStr = std::to_string(merged[i].endTime);
         int w = widths[i];
@@ -378,32 +378,32 @@ std::string SimulationEngine::format_metrics() const {
     std::ostringstream oss;
     oss << std::fixed << std::setprecision(2);
 
-    oss << "╔══════════════════════════════════════════════════════╗\n";
-    oss << "║                 PERFORMANCE METRICS                 ║\n";
-    oss << "╠══════════════════════════════════════════════════════╣\n";
-    oss << "║  Total Processes Completed : "
+    oss << "  +======================================================+\n";
+    oss << "  |                 PERFORMANCE METRICS                  |\n";
+    oss << "  +======================================================+\n";
+    oss << "  |  Total Processes Completed : "
         << std::setw(5) << m.totalProcesses
-        << "                         ║\n";
-    oss << "║  Simulation Duration       : "
-        << std::setw(5) << m.simulationDuration << " time units            ║\n";
-    oss << "╠══════════════════════════════════════════════════════╣\n";
-    oss << "║  Avg Waiting Time          : "
-        << std::setw(8) << m.avgWaitingTime << " units               ║\n";
-    oss << "║  Avg Turnaround Time       : "
-        << std::setw(8) << m.avgTurnaroundTime << " units               ║\n";
-    oss << "║  Avg Response Time         : "
-        << std::setw(8) << m.avgResponseTime << " units               ║\n";
-    oss << "╠══════════════════════════════════════════════════════╣\n";
-    oss << "║  CPU Utilization           : "
-        << std::setw(7) << m.cpuUtilization << "%                    ║\n";
-    oss << "║  Throughput                : "
-        << std::setw(8) << m.throughput << " proc/unit           ║\n";
-    oss << "║  Fairness (Waiting StdDev) : "
-        << std::setw(8) << m.fairnessStdDev << " units               ║\n";
-    oss << "║  Context Switches          : "
+        << "                    |\n";
+    oss << "  |  Simulation Duration       : "
+        << std::setw(5) << m.simulationDuration << " time units       |\n";
+    oss << "  +------------------------------------------------------+\n";
+    oss << "  |  Avg Waiting Time          : "
+        << std::setw(8) << m.avgWaitingTime << " units          |\n";
+    oss << "  |  Avg Turnaround Time       : "
+        << std::setw(8) << m.avgTurnaroundTime << " units          |\n";
+    oss << "  |  Avg Response Time         : "
+        << std::setw(8) << m.avgResponseTime << " units          |\n";
+    oss << "  +------------------------------------------------------+\n";
+    oss << "  |  CPU Utilization           : "
+        << std::setw(7) << m.cpuUtilization << "%               |\n";
+    oss << "  |  Throughput                : "
+        << std::setw(8) << m.throughput << " proc/unit      |\n";
+    oss << "  |  Fairness (Waiting StdDev) : "
+        << std::setw(8) << m.fairnessStdDev << " units          |\n";
+    oss << "  |  Context Switches          : "
         << std::setw(5) << m.contextSwitches
-        << "                         ║\n";
-    oss << "╚══════════════════════════════════════════════════════╝\n\n";
+        << "                    |\n";
+    oss << "  +======================================================+\n\n";
 
     return oss.str();
 }

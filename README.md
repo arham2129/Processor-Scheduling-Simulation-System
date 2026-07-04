@@ -152,6 +152,24 @@ Launch the executable to enter the interactive CLI:
 
 ---
 
+## Screenshots
+
+You can capture screenshots of the running simulation from your terminal and place them in the `screenshots/` directory to display them here:
+
+### 1. Interactive CLI Menu & Process Management
+![Interactive CLI Menu](screenshots/cli_menu.png)
+*The real-time status header and interactive command-line interface.*
+
+### 2. Gantt Chart Execution Visualization
+![Gantt Chart](screenshots/gantt_chart.png)
+*ASCII Gantt chart displaying precise execution time slices and context switches.*
+
+### 3. Performance Metrics Analysis
+![Performance Metrics](screenshots/performance_metrics.png)
+*Detailed statistical breakdown of Turnaround Time, Waiting Time, Response Time, CPU Utilization, Throughput, and Fairness.*
+
+---
+
 ## Configuration File Format
 
 Saved by option 5, loaded by option 6:

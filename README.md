@@ -52,6 +52,28 @@ with precise time boundaries.
 
 ---
 
+## Project Structure
+
+The project is organized into modular domain layers separating public interfaces (`include/`) from implementation (`src/`):
+
+```
+├── include/
+│   ├── core/                  # Core OS abstractions (CPU, Memory, I/O, PCB, Process, Queue)
+│   ├── schedulers/            # Abstract base scheduler & 7 concrete algorithm implementations
+│   └── simulation/            # Engine runtime & configuration File I/O
+├── src/
+│   ├── core/                  # Core abstraction implementations
+│   ├── schedulers/            # Algorithm implementations
+│   ├── simulation/            # Engine & I/O implementations
+│   └── main.cpp               # Application entry point & interactive CLI
+├── screenshots/               # PNG visual demonstrations for documentation
+├── CMakeLists.txt             # Modern CMake build configuration
+├── Makefile                   # GNU Make build configuration
+└── README.md                  # Project documentation
+```
+
+---
+
 ## Requirements
 
 - C++17 compatible compiler: **GCC 7+**, **Clang 5+**, or **MSVC 2017+**
@@ -95,13 +117,10 @@ scheduler.exe      # Windows
 ### Option C — Single g++ command
 
 ```bash
-g++ -std=c++17 -Wall -Wextra -O2 -o scheduler \
-    cpu.cpp fcfs_scheduler.cpp file_io.cpp io_subsystem.cpp \
-    main.cpp memory_manager.cpp mlfq_scheduler.cpp \
-    multilevel_queue_scheduler.cpp pcb.cpp \
-    preemptive_sjf_scheduler.cpp priority_scheduler.cpp \
-    process.cpp readyqueue.cpp round_robin_scheduler.cpp \
-    simulation_engine.cpp sjf_scheduler.cpp
+g++ -std=c++17 -Wall -Wextra -O2 \
+    -Iinclude -Iinclude/core -Iinclude/schedulers -Iinclude/simulation \
+    -o scheduler \
+    src/core/*.cpp src/schedulers/*.cpp src/simulation/*.cpp src/main.cpp
 ```
 
 > **Note:** `-std=c++17` is required (not c++11). The code uses C++17 features including

@@ -18,27 +18,28 @@
 
 CXX      := g++
 CXXFLAGS := -std=c++17 -Wall -Wextra -Wpedantic -Wshadow \
-            -Wno-unused-parameter -O2
+            -Wno-unused-parameter -O2 \
+            -Iinclude -Iinclude/core -Iinclude/schedulers -Iinclude/simulation
 
 TARGET   := scheduler
 
-# All source files in the current directory
-SRCS := cpu.cpp \
-        fcfs_scheduler.cpp \
-        file_io.cpp \
-        io_subsystem.cpp \
-        main.cpp \
-        memory_manager.cpp \
-        mlfq_scheduler.cpp \
-        multilevel_queue_scheduler.cpp \
-        pcb.cpp \
-        preemptive_sjf_scheduler.cpp \
-        priority_scheduler.cpp \
-        process.cpp \
-        readyqueue.cpp \
-        round_robin_scheduler.cpp \
-        simulation_engine.cpp \
-        sjf_scheduler.cpp
+# All source files across domain folders
+SRCS := src/core/cpu.cpp \
+        src/core/io_subsystem.cpp \
+        src/core/memory_manager.cpp \
+        src/core/pcb.cpp \
+        src/core/process.cpp \
+        src/core/readyqueue.cpp \
+        src/schedulers/fcfs_scheduler.cpp \
+        src/schedulers/mlfq_scheduler.cpp \
+        src/schedulers/multilevel_queue_scheduler.cpp \
+        src/schedulers/preemptive_sjf_scheduler.cpp \
+        src/schedulers/priority_scheduler.cpp \
+        src/schedulers/round_robin_scheduler.cpp \
+        src/schedulers/sjf_scheduler.cpp \
+        src/simulation/file_io.cpp \
+        src/simulation/simulation_engine.cpp \
+        src/main.cpp
 
 # Derive object file names from source files
 OBJS := $(SRCS:.cpp=.o)
